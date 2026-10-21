@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An explainable text-based fake news classification demo.">
+  <title>TruthLens | News text classifier</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="TruthLens home">🔎 TruthLens</a>
+    <nav aria-label="Main navigation">
+      <a href="#analyze">Analyze</a>
+      <a href="#latest">Latest news</a>
+      <a href="#performance">Performance</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <p class="eyebrow">EXPLAINABLE TEXT CLASSIFICATION</p>
+      <h1>News text, examined with care.</h1>
+      <p class="hero-copy">A small English text classifier with visible word contributions. Its output is a model estimate, not a fact check.</p>
+      <a class="button primary" href="#analyze">Analyze news text</a>
+      <p class="scope-note">TF-IDF + Logistic Regression · ISOT dataset · text only</p>
+    </section>
+
+    <section id="analyze" class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">TEXT ANALYSIS</p>
+          <h2>Analyze a headline or article</h2>
+        </div>
+      </div>
+      <p class="muted">The model was trained on titles plus full article bodies. A headline alone may contain less evidence.</p>
+      <form id="analysis-form">
+        <label for="news-text">News text</label>
+        <textarea id="news-text" name="text" maxlength="25000" rows="8" placeholder="Paste an English headline or article here..." required></textarea>
+        <div class="form-footer">
+          <span id="char-count" class="muted">0 / 25,000</span>
+          <button id="analyze-button" class="button primary" type="submit">Analyze text</button>
+        </div>
+      </form>
+      <p id="analysis-status" class="status" role="status"></p>
+      <div id="analysis-result" aria-live="polite"></div>
+    </section>
+
+    <section id="latest" class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">RSS DEMONSTRATION</p>
+          <h2>Latest news headlines</h2>
+        </div>
+        <button id="refresh-news" class="button secondary" type="button">Refresh headlines</button>
+      </div>
+      <p class="muted">Headlines are fetched from public RSS feeds and are not used for training or evaluation.</p>
+      <p id="news-status" class="status" role="status"></p>
+      <div id="news-list" class="news-list"></div>
+    </section>
+
+    <section id="performance" class="panel">
+      <p class="eyebrow">HELD-OUT EVALUATION</p>
+      <h2>Model performance</h2>
+      <p class="muted">Metrics are calculated from the saved test split. Dataset labels come from source membership.</p>
+      <div id="metric-cards" class="metric-grid"></div>
+      <div class="matrix-wrap">
+        <h3>Confusion matrix</h3>
+        <div id="confusion-matrix"></div>
+      </div>
+      <p id="evaluation-note" class="note"></p>
+    </section>
+
+    <section id="about" class="panel about">
+      <p class="eyebrow">PROJECT SCOPE</p>
+      <h2>A transparent baseline</h2>
+      <p>This prototype uses text cleanup, word TF-IDF, Logistic Regression, and local feature contributions. It does not use images, social-network signals, early propagation data, a transformer, or external evidence retrieval.</p>
+      <p class="warning">The score describes learned patterns in this dataset. It cannot establish whether a new claim is true or false. The ISOT real and fake files also come from different publisher groups, so dataset performance may reflect source and writing-style cues.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>TruthLens · student research prototype</span>
+    <span>No submitted text is saved by this web version.</span>
+  </footer>
+</body>
+</html>

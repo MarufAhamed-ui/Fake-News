@@ -1,0 +1,79 @@
+{
+  "project": "TruthLens: Explainable Text-Based Fake News Classification",
+  "dataset": "ISOT Fake News Dataset (True.csv and Fake.csv)",
+  "dataset_source": "True.csv contains Reuters articles; Fake.csv contains articles from outlets described by the dataset maintainers as unreliable.",
+  "source_label_limitation": "Labels are inherited from dataset file/source membership. They are not independent fact-checks of each claim, and the two classes have different publisher distributions.",
+  "language": "English",
+  "input_features": "cleaned title plus full article body",
+  "preprocessing": "lowercase, remove URLs, replace punctuation, collapse whitespace",
+  "duplicate_policy": "Remove exact duplicate cleaned title-and-body texts before splitting; remove conflicting duplicate texts if any are present.",
+  "split": "stratified random split: 80% train, 20% held-out test",
+  "random_state": 42,
+  "threshold_policy": "UNCERTAIN is shown when the highest Logistic Regression class score is below the fixed application cutoff. Scores are not calibrated truth probabilities.",
+  "confidence_threshold": 0.6,
+  "data_preparation": {
+    "input_rows_by_file": {
+      "True.csv": 21417,
+      "Fake.csv": 23481
+    },
+    "empty_rows_removed": 9,
+    "conflicting_rows_removed": 0,
+    "duplicate_rows_removed": 6063,
+    "prepared_examples": 38826,
+    "prepared_class_counts": {
+      "REAL": 20926,
+      "FAKE": 17900
+    }
+  },
+  "split_examples": {
+    "train": 31060,
+    "test": 7766
+  },
+  "model": {
+    "features": "word TF-IDF unigrams and bigrams",
+    "maximum_vocabulary": 50000,
+    "classifier": "Logistic Regression",
+    "class_weight": "balanced"
+  },
+  "test_metrics": {
+    "accuracy": 0.9917589492660314,
+    "precision_macro": 0.9918305374970358,
+    "recall_macro": 0.9915871473680558,
+    "f1_macro": 0.9917064293861091,
+    "confusion_matrix": [
+      [
+        4160,
+        26
+      ],
+      [
+        38,
+        3542
+      ]
+    ],
+    "confusion_matrix_labels": [
+      "REAL",
+      "FAKE"
+    ],
+    "per_class": {
+      "REAL": {
+        "precision": 0.9909480705097665,
+        "recall": 0.9937888198757764,
+        "f1": 0.9923664122137404,
+        "support": 4186
+      },
+      "FAKE": {
+        "precision": 0.9927130044843049,
+        "recall": 0.9893854748603352,
+        "f1": 0.9910464465584778,
+        "support": 3580
+      }
+    },
+    "examples": 7766,
+    "confidence_threshold": 0.6,
+    "test_coverage_at_threshold": 0.9886685552407932,
+    "accuracy_on_confident_test_examples": 0.9950507944777286,
+    "uncertain_test_examples": 88
+  },
+  "evaluation_note": "These are held-out results for this cleaned, deduplicated ISOT split. ISOT's real articles are primarily from Reuters, while its fake articles come from other outlets; performance may reflect publisher, topic, or writing-style cues. Do not interpret these numbers as accuracy on arbitrary current news or as fact verification.",
+  "external_test_set": false
+}

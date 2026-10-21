@@ -1,0 +1,6 @@
+Flask>=3.0,<4
+feedparser==6.0.14
+joblib==1.6.0
+numpy==2.5.3
+scikit-learn==1.9.1
+waitress>=3.0,<4
