@@ -201,7 +201,6 @@ async function loadMetrics() {
       root.append(card);
     }
     renderMatrix(test);
-    document.querySelector("#evaluation-note").textContent = data.evaluation_note || "";
   } catch (error) {
     document.querySelector("#metric-cards").append(el("p", "status", "Could not load metrics."));
   }
