@@ -19,6 +19,10 @@ function percentage(value) {
   return (Number(value || 0) * 100).toFixed(1) + "%";
 }
 
+function metricPercentage(value) {
+  return (Number(value || 0) * 100).toFixed(3) + "%";
+}
+
 function createResult(result) {
   const card = el("div", "result-card " + String(result.prediction || "").toLowerCase());
   const top = el("div", "result-top");
@@ -193,7 +197,7 @@ async function loadMetrics() {
     for (const item of cards) {
       const card = el("div", "metric");
       card.append(el("span", "metric-label", item[0]));
-      card.append(el("span", "metric-value", percentage(item[1])));
+      card.append(el("span", "metric-value", metricPercentage(item[1])));
       root.append(card);
     }
     renderMatrix(test);

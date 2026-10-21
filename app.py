@@ -145,8 +145,8 @@ def render_home(metrics: dict, available: bool) -> None:
     )
     values = metrics.get("test_metrics", {})
     cards = st.columns(4)
-    cards[0].metric("Held-out test accuracy", f'{values.get("accuracy", 0):.1%}')
-    cards[1].metric("Macro F1", f'{values.get("f1_macro", 0):.1%}')
+    cards[0].metric("Held-out test accuracy", f'{values.get("accuracy", 0):.3%}')
+    cards[1].metric("Macro F1", f'{values.get("f1_macro", 0):.3%}')
     cards[2].metric("Test examples", f'{values.get("examples", 0):,}')
     cards[3].metric("Uncertain cutoff", f'{CONFIDENCE_THRESHOLD:.0%}')
     st.markdown(
@@ -227,13 +227,14 @@ def render_performance(metrics: dict) -> None:
         return
     st.caption(
         "All figures below are calculated on the held-out test split. The reported "
-        "labels are inherited from the ISOT dataset files."
+        "labels are inherited from the ISOT dataset files. Percentages are shown to "
+        "three decimal places so closely sized metrics remain distinguishable."
     )
     cards = st.columns(4)
-    cards[0].metric("Accuracy", f'{test["accuracy"]:.1%}')
-    cards[1].metric("Macro precision", f'{test["precision_macro"]:.1%}')
-    cards[2].metric("Macro recall", f'{test["recall_macro"]:.1%}')
-    cards[3].metric("Macro F1", f'{test["f1_macro"]:.1%}')
+    cards[0].metric("Accuracy", f'{test["accuracy"]:.3%}')
+    cards[1].metric("Macro precision", f'{test["precision_macro"]:.3%}')
+    cards[2].metric("Macro recall", f'{test["recall_macro"]:.3%}')
+    cards[3].metric("Macro F1", f'{test["f1_macro"]:.3%}')
     st.subheader("Confusion matrix")
     labels = test["confusion_matrix_labels"]
     matrix = pd.DataFrame(
@@ -263,7 +264,7 @@ def render_performance(metrics: dict) -> None:
         })
     st.dataframe(
         pd.DataFrame(class_rows).set_index("Label").style.format(
-            {"Precision": "{:.1%}", "Recall": "{:.1%}", "F1": "{:.1%}"}
+            {"Precision": "{:.3%}", "Recall": "{:.3%}", "F1": "{:.3%}"}
         ),
         use_container_width=True,
     )
