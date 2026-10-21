@@ -134,7 +134,7 @@ def render_home(metrics: dict, available: bool) -> None:
         "text features that influenced its score."
     )
     if not available:
-        st.warning(
+        st.error(
             "The trained model is not available yet. Run "
             "python train_model.py from the TruthLens folder."
         )
@@ -172,7 +172,7 @@ def render_analyzer(model) -> None:
         submitted = st.form_submit_button("Analyze text", type="primary")
     if submitted:
         if not text.strip():
-            st.warning("Enter a headline or article first.")
+            st.info("Enter a headline or article first.")
         else:
             try:
                 result = analyze_text(text, model=model)
@@ -197,7 +197,7 @@ def render_news(model) -> None:
     with st.spinner("Loading RSS feeds..."):
         articles, errors = fetch_latest_news()
     for error in errors:
-        st.warning(error)
+        st.error(error)
     if not articles:
         st.info("No headlines are available. Check your internet connection and refresh.")
         return
@@ -223,7 +223,7 @@ def render_performance(metrics: dict) -> None:
     st.title("Model performance")
     test = metrics.get("test_metrics")
     if not test:
-        st.warning("Training metrics are missing. Run python train_model.py first.")
+        st.info("Training metrics are missing. Run python train_model.py first.")
         return
     st.caption(
         "All figures below are calculated on the held-out test split. The reported "
@@ -272,10 +272,11 @@ def render_performance(metrics: dict) -> None:
     st.write(f'**Dataset split:** {metrics.get("split", "Not recorded")}.')
     example_count = metrics.get("data_preparation", {}).get("prepared_examples", 0)
     st.write(f"**Examples after cleanup:** {example_count:,}.")
-    st.warning(metrics.get("evaluation_note", "Read the evaluation notes before interpreting this score."))
     st.caption(
-        "Metrics describe this held-out dataset split only; they are not proof that "
-        "the classifier can verify new real-world claims."
+        metrics.get(
+            "evaluation_note",
+            "These scores describe this held-out dataset only; they do not verify new claims.",
+        )
     )
 
 
@@ -287,7 +288,7 @@ def render_history() -> None:
     try:
         history = pd.read_csv(HISTORY_PATH)
     except (OSError, pd.errors.ParserError, UnicodeDecodeError):
-        st.warning("The history file could not be read.")
+        st.error("The history file could not be read.")
         return
     if history.empty:
         st.info("No analyses have been saved on this computer yet.")
@@ -314,16 +315,14 @@ def render_about(metrics: dict) -> None:
         the trained model. The feeds are not used for training or evaluation.
         """
     )
-    st.warning(
-        "The proposal title describes a multimodal transformer with images, social "
-        "context, early propagation, and advanced XAI. This prototype does not "
-        "implement those components. Present it as a text-only baseline or feasibility "
-        "prototype unless your supervisor approves a narrower thesis scope."
-    )
     st.markdown(
         f'**Training dataset:** {metrics.get("dataset", "ISOT Fake News Dataset")}. '
         "The original CSV files are used as provided; their labels are proxies based "
         "on source membership, not per-claim fact checks."
+    )
+    st.caption(
+        "Limitations: English text only; no images or social context. Results may "
+        "reflect publisher and writing-style patterns in ISOT, not claim truth."
     )
 
 
